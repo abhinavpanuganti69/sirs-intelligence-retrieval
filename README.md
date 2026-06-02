@@ -1,12 +1,6 @@
 
 
 ```
-# Local Document Search & Chat Application
-
-This application is a local-first Retrieval-Augmented Generation (RAG) platform. It allows users to upload documents (PDF, DOCX, TXT, MD), index them into a local FAISS vector database, view processing logs, and chat with a local LLM using the retrieved content.
-
----
-
 ## ⚠️ Runtime Notes
 
 ### 1. Avoid Using the `--reload` Flag on Windows
