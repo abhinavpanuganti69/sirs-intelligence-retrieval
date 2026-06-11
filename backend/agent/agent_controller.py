@@ -4,9 +4,8 @@ agent/agent_controller.py
 Optimized AgentController for SIRS.
 
 Key optimization:
-- IEEE compliance check runs CONCURRENTLY with response assembly
-  using asyncio.gather() — so it does not add to query response time.
-  Previously it ran sequentially after the LLM, adding ~50ms per query.
+- Fetches pre-saved document-level IEEE compliance reports directly 
+  from storage instead of running live text evaluation on short responses.
 """
 
 import asyncio
@@ -17,7 +16,7 @@ from loguru import logger
 from mcp.protocol    import MCPMessage, MCPResponse, ToolStatus
 from mcp.communication import mcp_bus
 from llm.ollama_client import ollama_client
-from tools.ieee_compliance_tool  import check_compliance
+from tools.ieee_compliance_store import get_compliance
 
 
 class AgentController:
@@ -28,7 +27,8 @@ class AgentController:
     1. Build execution plan
     2. Retrieve relevant chunks via MCP → retrieval_tool
     3. Generate answer via Ollama LLM
-    4. Return structured response payload
+    4. Fetch pre-calculated compliance document matrix
+    5. Return structured response payload
     """
 
     async def handle_query(
@@ -55,7 +55,7 @@ class AgentController:
         logger.info(f"[{session_id}] Query received: '{query[:80]}...'")
 
         # ── Step 1: Build plan ────────────────────────────────────────────────
-        plan = ["retrieve_documents", "generate_answer", "ieee_compliance_check"]
+        plan = ["retrieve_documents", "generate_answer", "fetch_ieee_compliance"]
 
         # ── Step 2: Retrieve relevant chunks via MCP ──────────────────────────
         retrieval_start = time.perf_counter()
@@ -117,17 +117,28 @@ class AgentController:
         })
         logger.info(f"[{session_id}] LLM generated answer in {llm_ms:.1f}ms")
 
-        # ── Step 4: IEEE Compliance (runs concurrently — does not block) ───────
-        # asyncio.to_thread runs the sync compliance check in a thread pool
-        # so it doesn't add to the response time
-        compliance_report = await asyncio.to_thread(
-            check_compliance, f"{query}\n\n{answer}\n\n{context}"
-        )
+        # ── Step 4: Fetch Pre-calculated IEEE Compliance Report ───────────────
+        compliance_report = None
+        compliance_status = "SKIPPED"
+
+        if chunks:
+            first_chunk = chunks[0]
+            # Prioritize standard unique doc_id if available, fallback to filename
+            doc_identifier = first_chunk.get("doc_id") or first_chunk.get("filename")
+            
+            if doc_identifier:
+                try:
+                    compliance_report = await asyncio.to_thread(get_compliance, doc_identifier)
+                    compliance_status = "SUCCESS" if compliance_report else "NOT_FOUND"
+                except Exception as e:
+                    logger.error(f"[{session_id}] Error loading compliance record for {doc_identifier}: {e}")
+                    compliance_status = "ERROR"
+
         tool_trace.append({
             "tool":     "ieee_compliance",
-            "action":   "check",
-            "status":   "SUCCESS",
-            "elapsed_ms": 0,   # non-blocking
+            "action":   "fetch",
+            "status":   compliance_status,
+            "elapsed_ms": 0,   # Database/cached storage microsecond operation
         })
 
         # ── Step 5: Assemble response ──────────────────────────────────────────
