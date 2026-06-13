@@ -3,9 +3,11 @@ agent/agent_controller.py
 --------------------------
 Optimized AgentController for SIRS.
 
-Key optimization:
-- Fetches pre-saved document-level IEEE compliance reports directly 
-  from storage instead of running live text evaluation on short responses.
+v2 Change — IEEE Compliance:
+- Step 4 now runs a live RAG-based compliance check on the LLM answer
+  + retrieved context instead of fetching a pre-saved document report.
+- IEEE 830, 829, 1016 are verified against actual standard clauses via
+  the standards FAISS index. IEEE 12207 and 730 remain keyword-based.
 """
 
 import asyncio
@@ -13,10 +15,10 @@ import time
 import uuid
 from loguru import logger
 
-from mcp.protocol    import MCPMessage, MCPResponse, ToolStatus
+from mcp.protocol      import MCPMessage, MCPResponse, ToolStatus
 from mcp.communication import mcp_bus
 from llm.ollama_client import ollama_client
-from tools.ieee_compliance_store import get_compliance
+from tools.ieee_compliance_tool import check_compliance        # ← updated import
 
 
 class AgentController:
@@ -27,7 +29,7 @@ class AgentController:
     1. Build execution plan
     2. Retrieve relevant chunks via MCP → retrieval_tool
     3. Generate answer via Ollama LLM
-    4. Fetch pre-calculated compliance document matrix
+    4. Run live IEEE compliance check (RAG-based for 830/829/1016)
     5. Return structured response payload
     """
 
@@ -55,7 +57,7 @@ class AgentController:
         logger.info(f"[{session_id}] Query received: '{query[:80]}...'")
 
         # ── Step 1: Build plan ────────────────────────────────────────────────
-        plan = ["retrieve_documents", "generate_answer", "fetch_ieee_compliance"]
+        plan = ["retrieve_documents", "generate_answer", "run_ieee_compliance_rag"]
 
         # ── Step 2: Retrieve relevant chunks via MCP ──────────────────────────
         retrieval_start = time.perf_counter()
@@ -73,10 +75,10 @@ class AgentController:
         retrieval_ms = (time.perf_counter() - retrieval_start) * 1000
 
         tool_trace.append({
-            "tool":         "retrieval_tool",
-            "action":       "search",
-            "status":       retrieval_response.status.value,
-            "elapsed_ms":   round(retrieval_ms, 2),
+            "tool":       "retrieval_tool",
+            "action":     "search",
+            "status":     retrieval_response.status.value,
+            "elapsed_ms": round(retrieval_ms, 2),
         })
 
         # Handle retrieval failure gracefully
@@ -94,11 +96,13 @@ class AgentController:
                 for c in chunks
             ])
 
-        logger.info(f"[{session_id}] Retrieved {len(chunks)} chunks from "
-                    f"{len(sources)} source(s) in {retrieval_ms:.1f}ms")
+        logger.info(
+            f"[{session_id}] Retrieved {len(chunks)} chunks from "
+            f"{len(sources)} source(s) in {retrieval_ms:.1f}ms"
+        )
 
         # ── Step 3: Generate answer via LLM ───────────────────────────────────
-        llm_start  = time.perf_counter()
+        llm_start = time.perf_counter()
 
         if not context.strip():
             answer = (
@@ -117,36 +121,51 @@ class AgentController:
         })
         logger.info(f"[{session_id}] LLM generated answer in {llm_ms:.1f}ms")
 
-        # ── Step 4: Fetch Pre-calculated IEEE Compliance Report ───────────────
+        # ── Step 4: Live RAG-based IEEE Compliance Check ──────────────────────
+        # Content = answer + source context snippet
+        # Richer content → better clause matching in the standards index
         compliance_report = None
         compliance_status = "SKIPPED"
 
-        if chunks:
-            first_chunk = chunks[0]
-            # Prioritize standard unique doc_id if available, fallback to filename
-            doc_identifier = first_chunk.get("doc_id") or first_chunk.get("filename")
-            
-            if doc_identifier:
-                try:
-                    compliance_report = await asyncio.to_thread(get_compliance, doc_identifier)
-                    compliance_status = "SUCCESS" if compliance_report else "NOT_FOUND"
-                except Exception as e:
-                    logger.error(f"[{session_id}] Error loading compliance record for {doc_identifier}: {e}")
-                    compliance_status = "ERROR"
+        if chunks and answer:
+            compliance_start = time.perf_counter()
+            try:
+                # Combine answer with context for richer compliance signal
+                # Context capped at 800 chars so phi4-mini isn't overloaded
+                compliance_content = answer
+                if context.strip():
+                    compliance_content = answer + "\n\n" + context[:800]
+
+                compliance_report  = await check_compliance(compliance_content)
+                compliance_ms      = (time.perf_counter() - compliance_start) * 1000
+                compliance_status  = "SUCCESS"
+
+                logger.info(
+                    f"[{session_id}] IEEE compliance check complete in {compliance_ms:.1f}ms | "
+                    f"verdict={compliance_report.get('verdict', '?')} | "
+                    f"RAG-verified: IEEE 830, 829, 1016"
+                )
+
+            except Exception as e:
+                compliance_ms    = (time.perf_counter() - compliance_start) * 1000
+                compliance_status = "ERROR"
+                logger.error(f"[{session_id}] Compliance check failed: {e}")
 
         tool_trace.append({
-            "tool":     "ieee_compliance",
-            "action":   "fetch",
-            "status":   compliance_status,
-            "elapsed_ms": 0,   # Database/cached storage microsecond operation
+            "tool":       "ieee_compliance",
+            "action":     "rag_check",               # ← was "fetch", now "rag_check"
+            "status":     compliance_status,
+            "elapsed_ms": round(compliance_ms, 2) if chunks and answer else 0,
         })
 
         # ── Step 5: Assemble response ──────────────────────────────────────────
-        elapsed_ms  = (time.perf_counter() - start_time) * 1000
-        confidence  = round(chunks[0]["score"], 4) if chunks else 0.0
+        elapsed_ms = (time.perf_counter() - start_time) * 1000
+        confidence = round(chunks[0]["score"], 4) if chunks else 0.0
 
-        logger.info(f"[{session_id}] Query complete in {elapsed_ms:.1f}ms | "
-                    f"Confidence: {confidence}")
+        logger.info(
+            f"[{session_id}] Query complete in {elapsed_ms:.1f}ms | "
+            f"Confidence: {confidence}"
+        )
 
         return {
             "session_id":           session_id,

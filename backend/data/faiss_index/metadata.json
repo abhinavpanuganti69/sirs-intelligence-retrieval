@@ -1,23 +1,79 @@
 [
   {
-    "chunk_id": "c4284496-20d5-4873-a5c9-239f0f10b634_chunk_0",
-    "doc_id": "c4284496-20d5-4873-a5c9-239f0f10b634",
-    "filename": "sample_doc.txt",
-    "content": "RADAR COMMUNICATION SYSTEM REPORT\n\n1. Overview\nThis report describes the architecture and operational details of the radar\ncommunication system deployed for surveillance purposes. The system operates\nin the X-band frequency range (8–12 GHz) for reliable data transmission.\n\n2. Encryption Protocols\nAll communication channels are secured using AES-256 encryption. Data packets\nare transmitted using frequency hopping spread spectrum (FHSS) to prevent\ninterception. Authentication is handled via RSA-2048 key exchange.\n\n3. Signal Processing\nThe radar system uses pulse compression techniques to improve range resolution.\nDoppler filtering is applied to distinguish moving targets from stationary clutter.\nSignal-to-noise ratio (SNR) is maintained above 15 dB under normal conditions.",
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_0",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "RESTRICTED / FOR TEST PURPOSES ONLY\nDEFENCE ELECTRONICS & WILDLIFE TELEMETRY LAB (DEWT)\nDEFENCE RESEARCH & DEVELOPMENT ORGANISATION, NEW DELHI\nEvaluation of Edge-Compute Language Models for Secure\nAutonomous Field Communication Baselines\nDr. A. K. Sundaram , Scientific Officer 'G'\nP. Rajivan , Scientist 'E'\nTactical Communication Systems Division (TCSD), DEWT, India\nABSTRACT— This research paper evaluates the performance profiles and inference behavior of\nhighly compact, sub-2B parameter Large Language Models (LLMs)—specifically examining\narchitectural layers analogous to TinyLlama-1.1B—for deployment on low-power, edge-compute\narchitectures in communications-denied environments. Tactical operations necessitate highly",
     "chunk_index": 0
   },
   {
-    "chunk_id": "c4284496-20d5-4873-a5c9-239f0f10b634_chunk_1",
-    "doc_id": "c4284496-20d5-4873-a5c9-239f0f10b634",
-    "filename": "sample_doc.txt",
-    "content": "ing is applied to distinguish moving targets from stationary clutter.\nSignal-to-noise ratio (SNR) is maintained above 15 dB under normal conditions.\n\n4. Monitoring System\nThe operational monitoring system logs all transmission events in real time.\nAlerts are triggered when signal degradation exceeds acceptable thresholds.\nRemote diagnostics are accessible through the secure control interface.\n\n5. Operational Guidelines\nOperators must authenticate using two-factor verification before accessing\nthe control panel. All logs are encrypted and stored locally for 90 days.\nUnauthorized access attempts are automatically reported to the security team.\n\n6. Conclusion\nThe radar communication system provides robust, encrypted, and reliable",
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_1",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "TinyLlama-1.1B—for deployment on low-power, edge-compute\narchitectures in communications-denied environments. Tactical operations necessitate highly\naccurate, zero-latency localized natural language parsing without external network dependency. We\npresent a standardized benchmark dataset framework measuring token throughput velocity ( ψ),\nperplexity variance ( ΔP), and hardware memory footprint preservation across resource-constrained\nembedded systems. Preliminary experimental trials demonstrate that optimized quantization models\nyield a deterministic command-parsing accuracy framework exceeding 94.2% while retaining a\nthermal and power usage profile compliant with standardized tactical battery packs.",
     "chunk_index": 1
   },
   {
-    "chunk_id": "c4284496-20d5-4873-a5c9-239f0f10b634_chunk_2",
-    "doc_id": "c4284496-20d5-4873-a5c9-239f0f10b634",
-    "filename": "sample_doc.txt",
-    "content": "cess attempts are automatically reported to the security team.\n\n6. Conclusion\nThe radar communication system provides robust, encrypted, and reliable\nsurveillance capabilities. Regular maintenance and software updates are\nessential to maintain optimal performance and security compliance.",
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_2",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "and-parsing accuracy framework exceeding 94.2% while retaining a\nthermal and power usage profile compliant with standardized tactical battery packs. \nKeywords— Edge AI, TinyLlama, Tactical Communication, Quantization, Low-Power Embedded Systems,\nNatural Language Parsing. \n1. INTRODUCTION\nModern tactical battlefield operational matrices demand resilient, decoupled computing frameworks where\nsemantic processing can occur without relying on active satellite data links. Traditional deep-learning language\narchitectures requiring server-grade graphical compute nodes fail to fulfill localized weight-distribution parameters.\nConsequently, optimizing small language models (SLMs) with parameters ranging from 1.0 billion to 1.5 billion\nscales is critical for military applications.",
     "chunk_index": 2
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_3",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "uently, optimizing small language models (SLMs) with parameters ranging from 1.0 billion to 1.5 billion\nscales is critical for military applications.\nThis paper systematically assesses the structural adaptability of TinyLlama-styled layers when operating under\nstringent memory caps. By reducing precision through 4-bit and 8-bit quantization protocols, our system processes\nnatural language mission instructions at the absolute edge, directly inside tactical transceivers or rugged uncrewed\naerial vehicle (UA V) base stations.\n2. MATHEMATICAL MODELING AND QUANTIZATION\nTo reduce systemic memory allocation overhead, we implement a uniform asymmetric quantization matrix that\ntransforms 32-bit floating-point weights ( Wfp32) down to an integer-based low-bit format ( Wint). The scaling",
+    "chunk_index": 3
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_4",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "rm asymmetric quantization matrix that\ntransforms 32-bit floating-point weights ( Wfp32) down to an integer-based low-bit format ( Wint). The scaling\ncoefficient adjustment sequence is represented explicitly via the following formulation:\nDRDO Technical Report TR-2026-DEWT-089 1\n\n(1)\n(2)Wint = clip ⌊ ( Wfp32 × S ) + Z ⌉\nWhere S denotes the specific real-value quantization scaling multiplier factor, Z represents the integer zero-point\noffset mapping baseline value, and the clipping operation bounds the resultant integer stream strictly between the\ntarget integer min/max distribution parameters.\nThe network loss function divergence is evaluated continuously by monitoring the relative perplexity metric\ndelta, formulated as follows:\nP(X) = exp ( − 1 / N × Σi=1N log P(xi | x) )",
+    "chunk_index": 4
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_5",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "nce is evaluated continuously by monitoring the relative perplexity metric\ndelta, formulated as follows:\nP(X) = exp ( − 1 / N × Σi=1N log P(xi | x) )\nAn increase in P(X) corresponds directly to a degradation of structural text generation coherence, which we seek to\nminimize across token processing operations.\n3. EXPERIMENTAL ARCHITECTURE AND BENCHMARK METRICS\nHardware testing profiles utilize an ARM Cortex-A72 quad-core processing matrix configured to mimic\ntactical field computing terminals. Table 1 outlines the exact performance matrix captured during standardized test\nloops using synthetic parsing commands.\nTABLE 1: PERFORMANCE MATRIX FOR LOW-PARAMETER EDGE LANGUAGE MODELS\nModel Format /\nConfigurationQuantization\nBitrateThroughput Token/s\n(ψ)Perplexity Core\nScoreRAM Usage\n(MB)",
+    "chunk_index": 5
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_6",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "TRIX FOR LOW-PARAMETER EDGE LANGUAGE MODELS\nModel Format /\nConfigurationQuantization\nBitrateThroughput Token/s\n(ψ)Perplexity Core\nScoreRAM Usage\n(MB)\nBaseline Native Format\n(FP32)32-bit 4.2 7.34 4400 MB\nOptimized Quantized (INT8) 8-bit 18.9 7.51 1150 MB\nTactical Deployable (INT4) 4-bit 31.4 8.12 620 MB\nThe empirical findings reveal that while the 4-bit quantization layout suffers a marginal degradation in\nperplexity scaling (+0.78 points), it unlocks an exceptional 7.47× processing throughput speed enhancement factor\ncompared to native 32-bit deployments. Crucially, the 620 MB operational RAM envelope allows seamless\nexecution alongside active telemetry loops without triggering system out-of-memory kernel panics.\n4. TEST VECTORS FOR MODEL PROMPT V ALIDATION",
+    "chunk_index": 6
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_7",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "amless\nexecution alongside active telemetry loops without triggering system out-of-memory kernel panics.\n4. TEST VECTORS FOR MODEL PROMPT V ALIDATION\nFor model parsing confirmation testing, the TinyLlama instance must ingest tactical JSON-like text strings and\ngenerate structured responses without failing. The following test cases are used for evaluation:\nTest Vector 01: Secure Command Extraction\nInput Text: [ORD-2026] Alpha-3 Team proceed immediately to Grid-Coordinate\nAlpha-Whiskey-4482. Maintain absolute RF silence until target parameters\nestablished. Ack required.\nDRDO Technical Report TR-2026-DEWT-089 2\n\nExpected Structured Output: {\"order_id\": \"ORD-2026\", \"unit\": \"Alpha-3\",\n\"destination\": \"AW4482\", \"comms\": \"silent\"}\nTest Vector 02: Telemetry Data Degradation Parsing",
+    "chunk_index": 7
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_8",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "ed Output: {\"order_id\": \"ORD-2026\", \"unit\": \"Alpha-3\",\n\"destination\": \"AW4482\", \"comms\": \"silent\"}\nTest Vector 02: Telemetry Data Degradation Parsing\nInput Text: SYSTEM_ALERT: Battery cell at 14% on tactical node 09. External\nambient temperature 44C. Operational capacity degrading rapidly.\nExpected Structured Output: {\"alert_type\": \"hardware\", \"node\": 9, \"status\":\n\"critical\", \"action\": \"power_save\"}\n5. CONCLUSION AND STRATEGIC HORIZONS\nThis technical report substantiates that sub-2B parameter LLMs like TinyLlama possess significant utility for\nlocalized, secure, and isolated battlefield computing matrices. Future developmental efforts will prioritize\ncompiling specialized low-rank adaptation (LoRA) modules focused extensively on localized maritime and",
+    "chunk_index": 8
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_9",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": ". Future developmental efforts will prioritize\ncompiling specialized low-rank adaptation (LoRA) modules focused extensively on localized maritime and\naerospace signaling dialects to optimize edge-intelligence resilience frameworks.\nREFERENCES\n[1] Vaswani, A., et al., \"Attention is All You Need,\" Advances in Neural Information Processing Systems , vol. 30, pp. 5998–\n6008, 2017.\n[2] Zhang, P., et al., \"TinyLlama: An Open-Source Small Language Model,\" arXiv preprint arXiv:2401.02385 , 2024.\n[3] Sundaram, A. K., \"Low-Power Localized NLP Frameworks for Secure Tactical Communications Labs,\" DRDO Journal of\nElectronic Systems , vol. 14, no. 2, pp. 112–125, 2025.\nDRDO Technical Report TR-2026-DEWT-089 3",
+    "chunk_index": 9
+  },
+  {
+    "chunk_id": "19e48240-06b2-4626-a80d-7c1968140738_chunk_10",
+    "doc_id": "19e48240-06b2-4626-a80d-7c1968140738",
+    "filename": "drdo_test_paper_tinyllama.pdf",
+    "content": "12–125, 2025.\nDRDO Technical Report TR-2026-DEWT-089 3",
+    "chunk_index": 10
   }
 ]

@@ -9,6 +9,7 @@ from retrieval.embeddings import embedding_model
 from retrieval.vector_store import vector_store
 from api.routes import router
 from routes.ieee_compliance_route import router as compliance_router
+from retrieval.standards_vector_store import get_standards_store
 
 # Import tools explicitly to trigger their registration decorators
 import tools.retrieval_tool
@@ -32,7 +33,8 @@ async def lifespan(app: FastAPI):
     SIRS Backend Lifespan:
     1. Pre-load the sentence-transformers model (all-MiniLM-L6-v2) for embeddings.
     2. Warmup FAISS Vector store and validate index/metadata sync.
-    3. Log active registered tools from registry.
+    3. Warmup IEEE Standards Vector store.
+    4. Log active registered tools from registry.
     """
     logger.info("Initializing SIRS Lifespan Sequence...")
     
@@ -45,6 +47,11 @@ async def lifespan(app: FastAPI):
     start_vs = time.perf_counter()
     count = vector_store.get_chunk_count()
     logger.info(f"FAISS Database loaded successfully with {count} active chunks in {(time.perf_counter() - start_vs):.2f}s")
+    
+    # ── NEW: Warm up IEEE Standards Vector Store ──
+    standards_store = get_standards_store()
+    logger.info(f"Standards index ready: {standards_store.stats()}")
+    # ──────────────────────────────────────────────
     
     # 3. Log registered MCP Tools list
     tools = tool_registry.get_registered_tools()

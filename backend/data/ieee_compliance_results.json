@@ -349,31 +349,30 @@
       ]
     }
   },
-  "c4284496-20d5-4873-a5c9-239f0f10b634": {
-    "filename": "sample_doc.txt",
+  "19e48240-06b2-4626-a80d-7c1968140738": {
+    "filename": "drdo_test_paper_tinyllama.pdf",
     "report": {
-      "timestamp": "2026-06-11T19:29:45.906187",
-      "overall_score_pct": 40.0,
+      "timestamp": "2026-06-13T19:56:48.437762",
+      "overall_score_pct": 66.7,
       "overall_passed": false,
       "verdict": "NEEDS IMPROVEMENT \u26a0\ufe0f",
-      "summary": "3/5 IEEE standards passed | Overall score: 40.0% | NEEDS IMPROVEMENT \u26a0\ufe0f",
+      "summary": "3/5 IEEE standards passed | Overall score: 66.7% | NEEDS IMPROVEMENT \u26a0\ufe0f | RAG-verified: IEEE 830, 829, 1016",
       "standards": [
         {
           "id": "IEEE 12207",
           "name": "Software Life Cycle Processes",
           "passed": true,
-          "score_pct": 66.7,
+          "score_pct": 83.3,
           "checks": {
             "covers_requirements_phase": false,
             "covers_design_phase": true,
-            "covers_implementation_phase": false,
+            "covers_implementation_phase": true,
             "covers_testing_phase": true,
             "covers_deployment_or_maintenance": true,
             "defines_process_roles": true
           },
           "failures": [
-            "Covers requirements phase",
-            "Covers implementation phase"
+            "Covers requirements phase"
           ],
           "suggestions": [
             "Add requirements documentation to cover the IEEE 12207 acquisition/supply process."
@@ -383,97 +382,68 @@
           "id": "IEEE 830",
           "name": "Software Requirements Specifications",
           "passed": true,
-          "score_pct": 50.0,
+          "score_pct": 83.3,
           "checks": {
             "has_functional_requirements": true,
             "has_non_functional_requirements": true,
             "has_scope_or_purpose": true,
-            "has_measurable_criteria": false,
+            "has_measurable_criteria": true,
             "has_traceability_indicators": false,
-            "has_constraints_or_assumptions": false
+            "has_constraints_or_assumptions": true
           },
           "failures": [
-            "Has measurable criteria",
-            "Has traceability indicators",
-            "Has constraints or assumptions"
+            "Has traceability indicators"
           ],
-          "suggestions": [
-            "Add measurable acceptance criteria (e.g., 'response < 200 ms') per IEEE 830 \u00a75.3.",
-            "Add requirement IDs (REQ-01, FR-01) for full traceability per IEEE 830 \u00a74.3.",
-            "Document constraints and assumptions (e.g., offline-only, Python 3.x) per IEEE 830."
-          ]
+          "suggestions": []
         },
         {
           "id": "IEEE 829",
           "name": "Software Test Documentation",
           "passed": false,
-          "score_pct": 0.0,
+          "score_pct": 50.0,
           "checks": {
-            "has_test_plan_or_cases": false,
-            "has_expected_results": false,
-            "has_test_types_defined": false,
-            "has_pass_fail_criteria": false,
-            "has_test_coverage": false,
-            "has_test_environment_or_tools": false
+            "rag_parse_error": false
           },
           "failures": [
-            "Has test plan or cases",
-            "Has expected results",
-            "Has test types defined",
-            "Has pass fail criteria",
-            "Has test coverage",
-            "Has test environment or tools"
+            "LLM response could not be parsed"
           ],
           "suggestions": [
-            "Add structured test cases with IDs (TC-01, TC-02) per IEEE 829 \u00a75.",
-            "Include edge cases and boundary tests per IEEE 829 \u00a77.",
-            "Define the types of tests (unit, integration, system) per IEEE 829 \u00a74."
+            "Manually verify content against IEEE 829 \u2014 Software Test Documentation."
           ]
         },
         {
           "id": "IEEE 1016",
           "name": "Software Design Description",
-          "passed": true,
+          "passed": false,
           "score_pct": 50.0,
           "checks": {
-            "has_architecture_description": true,
-            "has_interface_description": true,
-            "has_data_design": true,
-            "has_component_descriptions": false,
-            "has_design_rationale": false,
-            "has_diagrams_or_models": false
+            "rag_parse_error": false
           },
           "failures": [
-            "Has component descriptions",
-            "Has design rationale",
-            "Has diagrams or models"
+            "LLM response could not be parsed"
           ],
           "suggestions": [
-            "Include architecture/UML diagrams in design docs per IEEE 1016 \u00a75.4.",
-            "Document design decisions and rationale (why FAISS, why Ollama) per IEEE 1016 \u00a75.5."
+            "Manually verify content against IEEE 1016 \u2014 Software Design Description."
           ]
         },
         {
           "id": "IEEE 730",
           "name": "Software Quality Assurance",
-          "passed": false,
-          "score_pct": 33.3,
+          "passed": true,
+          "score_pct": 66.7,
           "checks": {
             "has_quality_objectives": false,
             "has_review_process": false,
-            "has_metrics_defined": false,
-            "has_defect_tracking": false,
+            "has_metrics_defined": true,
+            "has_defect_tracking": true,
             "has_standards_compliance_mention": true,
             "has_security_or_access_control": true
           },
           "failures": [
             "Has quality objectives",
-            "Has review process",
-            "Has metrics defined",
-            "Has defect tracking"
+            "Has review process"
           ],
           "suggestions": [
-            "Define quality metrics (retrieval accuracy, latency, recall) per IEEE 730 \u00a74.4.",
             "Document the code review and QA process per IEEE 730 \u00a74.2."
           ]
         }

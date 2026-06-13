@@ -86,7 +86,7 @@ async def ingest_document(file_path: str, filename: str, doc_id: str) -> MCPResp
 
         # ── NEW: Run IEEE Compliance Check on document text ───────────────────
         logger.info(f"Running IEEE compliance check on document: {filename}")
-        compliance_report = check_compliance(text)
+        compliance_report = await check_compliance(text)
         save_compliance(doc_id=doc_id, filename=filename, report=compliance_report)
         logger.info(
             f"IEEE compliance for {filename}: "

@@ -35,6 +35,7 @@ class QueryResponse(BaseModel):
     num_chunks_retrieved: int
     elapsed_ms: float
     compliance_report: Optional[Dict[str, Any]] = None
+
 # 1. GET /health
 @router.get("/health", response_model=Dict[str, Any])
 async def get_health() -> Dict[str, Any]:
@@ -86,12 +87,7 @@ async def post_query(request: QueryRequest) -> QueryResponse:
             threshold=request.threshold
         )
 
-        # ─── IEEE Compliance Check ───────────────────────────────
-        from tools.ieee_compliance_tool import check_compliance
-        answer_text = response_payload.get("answer", "")
-        response_payload["compliance_report"] = check_compliance(answer_text)
-        # ─────────────────────────────────────────────────────────
-
+        # Agent controller already attached the asynchronous compliance_report
         return QueryResponse(**response_payload)
     except Exception as e:
         logger.exception("FastAPI POST /query endpoint error")
@@ -241,9 +237,10 @@ async def get_document_compliance(doc_id: str) -> Dict[str, Any]:
         raise HTTPException(
             status_code=404,
             detail=f"No IEEE compliance data found for document '{doc_id}'. "
-                   f"Re-upload the document to generate a compliance report."
+            f"Re-upload the document to generate a compliance report."
         )
     return result
+
 # 11. GET /documents/compliance/all
 @router.get("/documents/compliance/all", response_model=Dict[str, Any])
 async def get_all_documents_compliance() -> Dict[str, Any]:
